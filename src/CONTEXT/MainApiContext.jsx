@@ -39,10 +39,9 @@ function MainApiContext({ children }) {
   useEffect(() => { APicall() },[])
 
   useEffect(() => {
-    let ModifingAPi =  mainAPIData.map( (elem)=>{ return {...elem, AddToCart:false, quantity:1, FinalPrice:elem.price} })
+    let ModifingAPi =  mainAPIData.map( (elem)=>{ return {...elem, AddToCart:false, quantity:1, FinalPrice:elem.price, Star:Math.floor(Math.random()*5)}  })
     setCopydata(ModifingAPi)
   }, [mainAPIData])
-  
 
   return (
     <APIcontext.Provider value={{ mainAPIData, setmainAPIData, Copydata, setCopydata, MainAPILoding, addToCartHandler}}>

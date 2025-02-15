@@ -1,10 +1,15 @@
 import { BsCart } from "react-icons/bs";
 import { useAPIcontext } from "../../CONTEXT/MainApiContext";
+import { useState } from "react";
 
-function Card({ price, image, description, id, AddToCart, }) {
-  let AddToCArtButtonTrue = " transition-all duration-300  hover:cursor-not-allowed flex w-full gap-x-4  items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700";
-  let AddToCArtButtonFalse = " transition-all duration-300 flex w-full gap-x-4  items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700";
-  
+function Card({ Star, price, image, description, id, AddToCart }) {
+  const [isImageLoded, setisImageLoded] = useState(false);
+
+  let AddToCArtButtonTrue =
+    " transition-all duration-300  hover:cursor-not-allowed flex w-full gap-x-4  items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700";
+  let AddToCArtButtonFalse =
+    " transition-all duration-300 flex w-full gap-x-4  items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700";
+
   let { addToCartHandler } = useAPIcontext();
 
   function truncateText(text, maxWords) {
@@ -12,14 +17,41 @@ function Card({ price, image, description, id, AddToCart, }) {
     if (words.length > maxWords) {
       return words.slice(0, maxWords).join(" ") + "...";
     }
-    return text;                                 
+    return text;
+  }
+
+  let SVG = (
+    <div class="flex bg-[#F1EFF1] items-center animate-pulse justify-center w-full h-full  rounded-sm sm:w-96 ">
+      <svg
+        class="w-20 h-20 "
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="silver"
+        viewBox="0 0 16 20"
+      >
+        <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z" />
+        <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z" />
+      </svg>
+    </div>
+  );
+
+  function CheackImageLode() {
+    setisImageLoded(true);
   }
 
   return (
     <>
-      <div className=" bg-white relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100  shadow-md">
-        <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl  justify-center">
-          <img className="object-cover " src={image} alt="product image" />
+      <div className=" bg-white w-full  relative m-10 flex flex-col overflow-hidden rounded-lg border border-gray-100  shadow-md">
+        <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl justify-center">
+          {!isImageLoded && SVG}
+          <img
+            onLoad={() => {
+              CheackImageLode();
+            }}
+            className="object-cover "
+            src={image}
+            alt="product image"
+          />
           <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
             {Math.floor(Math.random() * 50)}% OFF
           </span>
@@ -30,17 +62,17 @@ function Card({ price, image, description, id, AddToCart, }) {
               {truncateText(description, 7)}
             </p>
           </a>
-          <div className="mt-2 mb-5 flex items-center justify-between">
+          <div className="mt-2 mb-5 flex flex-col gap-y-3  items-start lg:flex-row lg:items-center justify-between ">
             <p>
               <span className="text-3xl font-bold text-slate-900">
-                ${Math.floor(price)}.{Math.floor(price*0.7)}
+                ${Math.floor(price)}.{Math.floor(price * 0.7)}
               </span>
               <span className="text-sm text-slate-900 line-through">
                 ${Math.floor(price * 1.2)}
               </span>
             </p>
             <div className="flex items-center">
-              {[...Array(5)].map((_, index) => (
+              {[...Array(Star || 3)].map((_, index) => (
                 <svg
                   key={index}
                   aria-hidden="true"
@@ -59,7 +91,7 @@ function Card({ price, image, description, id, AddToCart, }) {
           </div>
           <button
             onClick={(e) => {
-              addToCartHandler(e, id)
+              addToCartHandler(e, id);
             }}
             className={AddToCart ? AddToCArtButtonTrue : AddToCArtButtonFalse}
           >
