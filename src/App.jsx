@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify'
 export default function App() {
   return (
     <div className='min-h-[100vh]'>
-        <ToastContainer />
+        
         <Navbar/>
         <ImageHero/>
         <LatestProductsBG/>

@@ -5,34 +5,50 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide } from "react-toastify";
 
-
 export let APIcontext = createContext();
-export function useAPIcontext() {return useContext(APIcontext)}
-
+export function useAPIcontext() {
+  return useContext(APIcontext);
+}
 
 function MainApiContext({ children }) {
-  const [mainAPIData, setmainAPIData] = useState([])
-  const [Copydata, setCopydata] = useState([])
-  const [MainAPILoding, setMainAPILoding] = useState(false)
-
- 
+  // STATES
+  const [mainAPIData, setmainAPIData] = useState([]);
+  const [Copydata, setCopydata] = useState([]);
+  const [MainAPILoding, setMainAPILoding] = useState(false);
+  // STATES
 
   function addToCartHandler(e, id) {
     e.preventDefault();
     e.stopPropagation();
-    AddedTosterItem()
+
+    if (itemsAlreadyAdded(id)) return
+    AddedItemToster();
+    itemsInCart(id);
+  }
+
+  // FUNCTIONS
+  function itemsInCart(id) {  
     let AddToCartTurner = Copydata.map((elem) => {
       if (elem.id == id) {
         return { ...elem, AddToCart: true };
       }
       return elem;
-    })
-      setCopydata(AddToCartTurner)
-      
+    });
+    setCopydata(AddToCartTurner);
   }
 
-  function AddedTosterItem(params) {
-    toast.success('🛒 Added To Cart!', {
+  function itemsAlreadyAdded(id) {
+    for (const elem of Copydata) {
+      if (elem.id == id && elem.AddToCart){
+        WarningAddedItemToster()
+        return  true 
+      } 
+    }
+    return false
+  }
+
+  function AddedItemToster() {
+    toast.success("🛒 Added To Cart!", {
       position: "top-center",
       autoClose: 1,
       hideProgressBar: false,
@@ -42,39 +58,69 @@ function MainApiContext({ children }) {
       progress: undefined,
       theme: "light",
       transition: Slide,
-      });
-  }
+    });
+}
 
+function WarningAddedItemToster() {
+  toast.warn('⚠️ Already Added!', {
+    position: "top-center",
+    autoClose: 12,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Slide,
+    });
+  
+}
+  // FUNCTIONS
+
+  // API-CALL
   async function APicall() {
     try {
-      setMainAPILoding(true)
+      setMainAPILoding(true);
       let response = await axios.get("https://fakestoreapi.com/products");
       setmainAPIData(response.data);
-      setMainAPILoding(false)
+      setMainAPILoding(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
-
- 
-
-  useEffect(() => { APicall() },[])
+  // API-CALL
 
   useEffect(() => {
-    let ModifingAPi =  mainAPIData.map( (elem)=>{ return {...elem, AddToCart:false, quantity:1, FinalPrice:elem.price, Star:Math.floor(Math.random()*5)}  })
-    setCopydata(ModifingAPi)
-  }, [mainAPIData])
+    APicall();
+  }, []);
+
+  useEffect(() => {
+    let ModifingAPi = mainAPIData.map((elem) => {
+      return {
+        ...elem,
+        AddToCart: false,
+        quantity: 1,
+        FinalPrice: elem.price,
+        Star: Math.floor(Math.random() * 5),
+      };
+    });
+    setCopydata(ModifingAPi);
+  }, [mainAPIData]);
 
   return (
-    <APIcontext.Provider value={{ mainAPIData, setmainAPIData, Copydata, setCopydata, MainAPILoding, addToCartHandler}}>
+    <APIcontext.Provider
+      value={{
+        mainAPIData,
+        setmainAPIData,
+        Copydata,
+        setCopydata,
+        MainAPILoding,
+        addToCartHandler,
+      }}
+    >
       {children}
     </APIcontext.Provider>
-  )
+  );
 }
 
-
 export default MainApiContext;
-
-
-
-

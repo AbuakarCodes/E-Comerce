@@ -13,6 +13,7 @@ import ContactSkeleton from "./SKELETONS/CONTACTsKELETON/ContactSkeleton";
 import LoginSkeleton from "./SKELETONS/LOGINsKELETON/LoginSkeleton";
 import RejesterSkeleton from "./SKELETONS/REGISTERsKELETON/RejesterSkeleton";
 import CartSkeleton from "./SKELETONS/CARTsKELETON/CartSkeleton";
+import { ToastContainer } from "react-toastify";
 
 const About = lazy(() => import("./COMPONENTS/ABOUT/About"));
 const MainApiContext = lazy(() => import("./CONTEXT/MainApiContext"));
@@ -33,6 +34,8 @@ const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
   <MainApiContext>
     <BrowserRouter>
+    <ToastContainer />
+    
       <Routes>
         <Route path="*" element={<PageNotFound />} />
         <Route path="/" element={<App />} />
