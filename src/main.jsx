@@ -12,6 +12,7 @@ import AboutSkeleoton from "./SKELETONS/ABOUTsKELETON/AboutSkeleoton";
 import ContactSkeleton from "./SKELETONS/CONTACTsKELETON/ContactSkeleton";
 import LoginSkeleton from "./SKELETONS/LOGINsKELETON/LoginSkeleton";
 import RejesterSkeleton from "./SKELETONS/REGISTERsKELETON/RejesterSkeleton";
+import CartSkeleton from "./SKELETONS/CARTsKELETON/CartSkeleton";
 
 const About = lazy(() => import("./COMPONENTS/ABOUT/About"));
 const MainApiContext = lazy(() => import("./CONTEXT/MainApiContext"));
@@ -73,7 +74,7 @@ ReactDOM.createRoot(root).render(
          <Route
           path="/cart"
           element={
-            <Suspense fallback={"loding"}>
+            <Suspense fallback={<CartSkeleton/>}>
               <Cart />
             </Suspense>
           }

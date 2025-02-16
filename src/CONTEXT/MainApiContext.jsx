@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Slide } from "react-toastify";
+
 
 export let APIcontext = createContext();
 export function useAPIcontext() {return useContext(APIcontext)}
@@ -11,9 +15,12 @@ function MainApiContext({ children }) {
   const [Copydata, setCopydata] = useState([])
   const [MainAPILoding, setMainAPILoding] = useState(false)
 
+ 
+
   function addToCartHandler(e, id) {
     e.preventDefault();
     e.stopPropagation();
+    AddedTosterItem()
     let AddToCartTurner = Copydata.map((elem) => {
       if (elem.id == id) {
         return { ...elem, AddToCart: true };
@@ -21,6 +28,21 @@ function MainApiContext({ children }) {
       return elem;
     })
       setCopydata(AddToCartTurner)
+      
+  }
+
+  function AddedTosterItem(params) {
+    toast.success('🛒 Added To Cart!', {
+      position: "top-center",
+      autoClose: 1,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Slide,
+      });
   }
 
   async function APicall() {

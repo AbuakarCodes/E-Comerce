@@ -3,6 +3,10 @@ import { LuLogIn } from "react-icons/lu";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsCart } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { ImCross } from "react-icons/im";
+
+
+
 
 import { useState } from "react";
 import { NavLink } from "react-router";
@@ -34,14 +38,14 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className=" sticky top-0 z-50 bg-[#F8F9FA]">
+    <nav className=" sticky top-0 z-50 bg-[#F8F9FA] transition-all delay-200">
       <div className="container py-3 lg:py-4 flex flex-col gap-y-4 lg:flex-row items-center justify-between">
         <div className="flex items-center justify-between w-full lg:w-fit">
           <NavLink to={"/"} className={"lg:text-[2rem] font-bold text-[1.8rem]"}>
           SnapBuy 
           </NavLink>
           <button onClick={navTogel} className="lg:hidden">
-            <GiHamburgerMenu className="text-2xl" />
+            {isOpen? <ImCross className="text-xl font-bold" />:<GiHamburgerMenu className="text-2xl" />}
           </button>
         </div>
 
